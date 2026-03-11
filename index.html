@@ -27,16 +27,16 @@
             background-size: 100% 4px, 3px 100%; pointer-events: none; z-index: 100;
         }
 
-        /* EXTENSION : EFFETS VISUELS AVANCÉS */
+        /* EXTENSION : EFFETS VISUELS ET ANIMATIONS */
         canvas { filter: contrast(110%) brightness(90%); }
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
-        .quest-alert { animation: pulse 2s infinite; }
+        .quest-alert { animation: pulse 2s infinite; color: var(--yellow); font-size: 12px; margin-top: 10px; }
 
-        /* HUD (HEAD-UP DISPLAY) */
+        /* HUD (HEAD-UP DISPLAY) AVEC LOGO */
         #hud { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             pointer-events: none; z-index: 10; padding: 20px; box-sizing: border-box; 
@@ -46,7 +46,10 @@
             background: rgba(0,0,0,0.85); border-left: 4px solid var(--neon); 
             padding: 15px; width: fit-content; pointer-events: auto;
             box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
+            display: flex; align-items: center; gap: 15px;
         }
+
+        .logo-nd { width: 50px; height: 50px; border: 1px solid var(--neon); box-shadow: 0 0 10px var(--neon); }
 
         #status-tag { 
             position: absolute; top: 20px; right: 20px; padding: 8px 20px; 
@@ -80,7 +83,7 @@
             color: white; padding: 8px; box-sizing: border-box; outline: none;
         }
 
-        /* CONTROLES TACTILES */
+        /* CONTROLES */
         #joy-container { 
             position: absolute; bottom: 40px; left: 40px; width: 130px; height: 130px; 
             background: rgba(255,255,255,0.05); border-radius: 50%; 
@@ -99,24 +102,21 @@
             text-shadow: 0 0 10px red; box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
         }
 
-        button { 
-            background: var(--neon); border: none; padding: 12px 20px; 
-            font-weight: bold; cursor: pointer; color: black; 
-            text-transform: uppercase; transition: 0.2s;
-        }
-        button:hover { background: white; }
-
-        .quest-alert { color: var(--yellow); font-size: 12px; margin-top: 10px; }
+        button { background: var(--neon); border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; color: black; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <div id="hud">
         <div class="stat-panel">
-            <div style="font-size: 20px; letter-spacing: 2px;">ADAMA <span style="font-size: 12px; color: var(--neon);">[CORE]</span></div>
-            <div style="color: var(--neon); font-size: 12px; margin-bottom: 8px;">CLAN: ND-Z COMMANDO</div>
-            <div style="font-size: 14px;">NIVEAU: <span id="lvl">1</span> | XP: <span id="xp">0</span></div>
-            <div class="quest-alert" id="active-quest">MISSION: Explorer les environs de Macassi</div>
+            <img src="image_0.png" alt="Logo ND" class="logo-nd">
+            
+            <div>
+                <div style="font-size: 20px; letter-spacing: 2px;">ADAMA <span style="font-size: 12px; color: var(--neon);">[CORE]</span></div>
+                <div style="color: var(--neon); font-size: 12px; margin-bottom: 8px;">CLAN: ND-Z COMMANDO</div>
+                <div style="font-size: 14px;">NIVEAU: <span id="lvl">1</span> | XP: <span id="xp">0</span></div>
+                <div class="quest-alert" id="active-quest">MISSION: Explorer Macassi</div>
+            </div>
         </div>
 
         <div id="status-tag" class="online">MODE: CONNECTÉ</div>
@@ -130,47 +130,45 @@
             <div>[X] MODULE TERMUX V1.0</div>
             <div>[X] CARTE ACCÈS CVSA</div>
             <div>[X] CRYPTO ND-COIN: <span style="color: var(--yellow);">500</span></div>
-            <div>[ ] VÉHICULE: NON ÉQUIPÉ</div>
         </div>
         <button onclick="toggleInventory()" style="margin-top: 30px; width: 100%;">RETOUR AU MONDE</button>
     </div>
 
     <div id="chat-container">
         <div id="chat-box">
-            <div style="color: var(--neon);">[INFO] Initialisation des systèmes...</div>
-            <div style="color: var(--neon);">[INFO] Bienvenue dans la Citadelle, Adama.</div>
+            <div style="color: var(--neon);">[INFO] Systèmes opérationnels.</div>
+            <div style="color: var(--neon);">[INFO] Bienvenue, Adama.</div>
         </div>
         <input id="chat-input" type="text" placeholder="Entrez un message (T)...">
     </div>
 
-    <div id="joy-container">
-        <div id="joy-stick"></div>
-    </div>
-
+    <div id="joy-container"><div id="joy-stick"></div></div>
     <div id="action-btn" onclick="triggerAction()">ACTION</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
+        // Enregistrement du Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
         function toggleInventory() {
             const inv = document.getElementById('inventory');
             inv.style.display = (inv.style.display === 'block') ? 'none' : 'block';
         }
 
         function triggerAction() {
-            console.log("Action déclenchée !");
             if(window.gameAction) window.gameAction();
         }
 
         window.addEventListener('online', () => {
             const tag = document.getElementById('status-tag');
-            tag.className = 'online';
-            tag.innerText = 'MODE: CONNECTÉ';
+            tag.className = 'online'; tag.innerText = 'MODE: CONNECTÉ';
         });
 
         window.addEventListener('offline', () => {
             const tag = document.getElementById('status-tag');
-            tag.className = 'offline';
-            tag.innerText = 'MODE: HORS-LIGNE';
+            tag.className = 'offline'; tag.innerText = 'MODE: HORS-LIGNE';
         });
     </script>
 </body>
