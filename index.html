@@ -36,7 +36,7 @@
         }
         .quest-alert { animation: pulse 2s infinite; color: var(--yellow); font-size: 12px; margin-top: 10px; }
 
-        /* HUD (HEAD-UP DISPLAY) AVEC LOGO */
+        /* HUD AVEC LOGO OFFICIEL */
         #hud { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             pointer-events: none; z-index: 10; padding: 20px; box-sizing: border-box; 
@@ -49,6 +49,7 @@
             display: flex; align-items: center; gap: 15px;
         }
 
+        /* CORRECTION : SOURCE DU LOGO */
         .logo-nd { width: 50px; height: 50px; border: 1px solid var(--neon); box-shadow: 0 0 10px var(--neon); }
 
         #status-tag { 
@@ -59,7 +60,6 @@
         .online { background: var(--neon); color: black; box-shadow: 0 0 15px var(--neon); }
         .offline { background: #ff4444; color: white; box-shadow: 0 0 15px #ff4444; }
 
-        /* MENU INVENTAIRE */
         #inventory { 
             display: none; position: absolute; top: 50%; left: 50%; 
             transform: translate(-50%, -50%); width: 85%; max-width: 450px; 
@@ -68,7 +68,6 @@
             box-shadow: 0 0 50px rgba(0, 255, 204, 0.2);
         }
 
-        /* CHAT SYSTEM */
         #chat-container {
             position: absolute; bottom: 180px; left: 20px; width: 280px;
             pointer-events: auto;
@@ -83,7 +82,6 @@
             color: white; padding: 8px; box-sizing: border-box; outline: none;
         }
 
-        /* CONTROLES */
         #joy-container { 
             position: absolute; bottom: 40px; left: 40px; width: 130px; height: 130px; 
             background: rgba(255,255,255,0.05); border-radius: 50%; 
@@ -109,7 +107,7 @@
 
     <div id="hud">
         <div class="stat-panel">
-            <img src="image_0.png" alt="Logo ND" class="logo-nd">
+            <img src="image_2.png" alt="Logo ND" class="logo-nd">
             
             <div>
                 <div style="font-size: 20px; letter-spacing: 2px;">ADAMA <span style="font-size: 12px; color: var(--neon);">[CORE]</span></div>
@@ -120,7 +118,6 @@
         </div>
 
         <div id="status-tag" class="online">MODE: CONNECTÉ</div>
-        
         <button style="pointer-events: auto; margin-top: 15px;" onclick="toggleInventory()">SYSTÈME (I)</button>
     </div>
 
@@ -147,7 +144,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Enregistrement du Service Worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
