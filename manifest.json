@@ -1,0 +1,24 @@
+{
+  "name": "ND-CITADEL : MÉTAVERS ADAMA",
+  "short_name": "ND-CITADEL",
+  "description": "Métavers futuriste d'Abidjan créé par N'DIAYE ADAMA.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050505",
+  "theme_color": "#00ffcc",
+  "icons": [
+    {
+      "src": "image_0.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "image_0.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
