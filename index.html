@@ -3,40 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ND-CITADEL | MÉTAVERS BY ADAMA</title>
+    <title>ND-CITADEL | ALPHA</title>
     <link rel="manifest" href="manifest.json">
     <style>
         :root { 
             --neon: #00ffcc; 
             --dark: #050505; 
-            --magenta: #ff00ff; 
             --yellow: #ffcc00;
         }
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            overflow: hidden; background: var(--dark); 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white; 
+            overflow: hidden; background: #000; 
+            font-family: 'Segoe UI', sans-serif; color: white; 
         }
 
-        /* EFFET DE SCANNER CYBERPUNK */
-        body::after {
-            content: " "; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 255, 204, 0.05) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-            background-size: 100% 4px, 3px 100%; pointer-events: none; z-index: 100;
-        }
-
-        /* EXTENSION : EFFETS VISUELS ET ANIMATIONS */
-        canvas { filter: contrast(110%) brightness(90%); }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        .quest-alert { animation: pulse 2s infinite; color: var(--yellow); font-size: 12px; margin-top: 10px; }
-
-        /* HUD (HEAD-UP DISPLAY) AVEC LOGO OFFICIEL image_2.png */
+        /* HUD */
         #hud { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             pointer-events: none; z-index: 10; padding: 20px; box-sizing: border-box; 
@@ -45,43 +27,10 @@
         .stat-panel { 
             background: rgba(0,0,0,0.85); border-left: 4px solid var(--neon); 
             padding: 15px; width: fit-content; pointer-events: auto;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
             display: flex; align-items: center; gap: 15px;
         }
 
-        .logo-nd { width: 50px; height: 50px; border: 1px solid var(--neon); box-shadow: 0 0 10px var(--neon); }
-
-        #status-tag { 
-            position: absolute; top: 20px; right: 20px; padding: 8px 20px; 
-            border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase;
-            letter-spacing: 1px; transition: 0.3s;
-        }
-        .online { background: var(--neon); color: black; box-shadow: 0 0 15px var(--neon); }
-        .offline { background: #ff4444; color: white; box-shadow: 0 0 15px #ff4444; }
-
-        /* MENU INVENTAIRE */
-        #inventory { 
-            display: none; position: absolute; top: 50%; left: 50%; 
-            transform: translate(-50%, -50%); width: 85%; max-width: 450px; 
-            background: rgba(5,5,5,0.98); border: 2px solid var(--neon); 
-            pointer-events: auto; padding: 25px; z-index: 50;
-            box-shadow: 0 0 50px rgba(0, 255, 204, 0.2);
-        }
-
-        /* CHAT SYSTEM */
-        #chat-container {
-            position: absolute; bottom: 180px; left: 20px; width: 280px;
-            pointer-events: auto;
-        }
-        #chat-box { 
-            height: 120px; background: rgba(0,0,0,0.7); 
-            border: 1px solid var(--neon); overflow-y: auto; 
-            padding: 10px; font-size: 13px; margin-bottom: 5px;
-        }
-        #chat-input { 
-            width: 100%; background: #000; border: 1px solid var(--neon); 
-            color: white; padding: 8px; box-sizing: border-box; outline: none;
-        }
+        .logo-nd { width: 50px; height: 50px; border: 1px solid var(--neon); }
 
         /* CONTROLES */
         #joy-container { 
@@ -91,7 +40,7 @@
         }
         #joy-stick { 
             position: absolute; top: 40px; left: 40px; width: 50px; height: 50px; 
-            background: var(--neon); border-radius: 50%; box-shadow: 0 0 25px var(--neon); 
+            background: var(--neon); border-radius: 50%; box-shadow: 0 0 20px var(--neon); 
         }
 
         #action-btn {
@@ -99,10 +48,13 @@
             background: rgba(255, 0, 0, 0.2); border: 2px solid red; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             pointer-events: auto; font-weight: bold; color: white; cursor: pointer;
-            text-shadow: 0 0 10px red; box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
         }
 
-        button { background: var(--neon); border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; color: black; text-transform: uppercase; }
+        #chat-box {
+            position: absolute; bottom: 180px; left: 20px; width: 280px;
+            height: 100px; background: rgba(0,0,0,0.6); border: 1px solid var(--neon);
+            padding: 10px; font-size: 12px; color: var(--neon); overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -110,36 +62,16 @@
     <div id="hud">
         <div class="stat-panel">
             <img src="image_2.png" alt="Logo ND" class="logo-nd">
-            
             <div>
-                <div style="font-size: 20px; letter-spacing: 2px;">ADAMA <span style="font-size: 12px; color: var(--neon);">[CORE]</span></div>
-                <div style="color: var(--neon); font-size: 12px; margin-bottom: 8px;">CLAN: ND-Z COMMANDO</div>
-                <div style="font-size: 14px;">NIVEAU: <span id="lvl">1</span> | XP: <span id="xp">0</span></div>
-                <div class="quest-alert" id="active-quest">MISSION: Explorer Macassi</div>
+                <div style="font-size: 18px;">ADAMA <span style="font-size: 10px; color: var(--neon);">[CORE]</span></div>
+                <div style="font-size: 14px;">XP: <span id="xp-val">0</span> | LVL: 1</div>
             </div>
         </div>
-
-        <div id="status-tag" class="online">MODE: CONNECTÉ</div>
-        
-        <button style="pointer-events: auto; margin-top: 15px;" onclick="toggleInventory()">SYSTÈME (I)</button>
     </div>
 
-    <div id="inventory">
-        <h2 style="color: var(--neon); margin-top: 0; letter-spacing: 3px;">INVENTAIRE ND-Z</h2>
-        <div id="items-list" style="line-height: 1.8;">
-            <div>[X] MODULE TERMUX V1.0</div>
-            <div>[X] CARTE ACCÈS CVSA</div>
-            <div>[X] CRYPTO ND-COIN: <span style="color: var(--yellow);">500</span></div>
-        </div>
-        <button onclick="toggleInventory()" style="margin-top: 30px; width: 100%;">RETOUR AU MONDE</button>
-    </div>
-
-    <div id="chat-container">
-        <div id="chat-box">
-            <div style="color: var(--neon);">[INFO] Systèmes opérationnels.</div>
-            <div style="color: var(--neon);">[INFO] Bienvenue, Adama.</div>
-        </div>
-        <input id="chat-input" type="text" placeholder="Entrez un message (T)...">
+    <div id="chat-box">
+        [SYSTEM] Chargement de Macassi...<br>
+        [SYSTEM] Moteur ND-Z prêt.
     </div>
 
     <div id="joy-container"><div id="joy-stick"></div></div>
@@ -148,43 +80,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
     <script src="script.js"></script>
-    
+
     <script>
-        // --- LA CORRECTION EST ICI ---
-        // Cette fonction lance le jeu DES QUE tout est chargé
-        window.onload = function() {
-            // Enregistrement du Service Worker
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js');
-            }
-            
-            // Lancement du moteur 3D (init est dans script.js)
-            if(typeof init === 'function') {
-                init(); 
-                console.log("ND-Z ENGINE ACTIVATED");
-            } else {
-                console.error("ERREUR : Impossible de trouver la fonction init() dans script.js");
-            }
-        };
-
-        function toggleInventory() {
-            const inv = document.getElementById('inventory');
-            inv.style.display = (inv.style.display === 'block') ? 'none' : 'block';
-        }
-
+        // Ce petit code vérifie que tout est lié
         function triggerAction() {
-            if(window.gameAction) window.gameAction();
+            if(window.gameAction) {
+                window.gameAction();
+            } else {
+                console.log("Action locale : En attente du moteur...");
+            }
         }
-
-        window.addEventListener('online', () => {
-            const tag = document.getElementById('status-tag');
-            tag.className = 'online'; tag.innerText = 'MODE: CONNECTÉ';
-        });
-
-        window.addEventListener('offline', () => {
-            const tag = document.getElementById('status-tag');
-            tag.className = 'offline'; tag.innerText = 'MODE: HORS-LIGNE';
-        });
     </script>
 </body>
 </html>
